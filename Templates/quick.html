@@ -1,0 +1,471 @@
+
+{% load static %}
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/css/quickstyle.css' %}">
+    <link rel="stylesheet" href="{% static '/css/all.css' %}">
+    <link rel="stylesheet" type="text/css" id="applicationStylesheet" href="Artboard__1.css" />
+    <link rel="stylesheet" href="{% static '/css/lightbox.min.css' %}">
+
+    
+    <title>RESELLER'S BAY</title>
+   
+  </head>
+<style>
+    
+ 
+#username{
+  
+  font-weight: bold;
+  font-size: 40px;
+  color: violet;
+}
+#main{
+  background-color: aquamarine;
+}
+.co{
+  
+  display: inline-block;
+  width: 686px;
+  height: 450px;
+  background:linear-gradient(45deg,rgb(252,85,224),rgb(255,199,94));
+  color: #fff;
+  margin-top: 100px;
+  margin-left: 349px;
+  margin-bottom: 10px;
+  border-radius: 40px 40px 40px 40px;
+}
+h3{
+  text-align: center;
+}
+.fa{
+  margin-left:220px
+}
+.comman{
+  width: 50px;
+  margin-top: 10px;
+}
+.form-control{
+width: 61%;
+margin-left: 128px;
+}
+label{
+  margin-left: 131px;
+}
+.nav-item >a{
+  background:linear-gradient(-60deg,rgb(25,114,230),rgb(234,0,255));
+border-radius: 25px;
+}
+.form-group {
+  margin-bottom: 0rem;
+}
+.nav-item >a:hover{
+  background:linear-gradient(-60deg,rgb(25,114,230),rgb(234,0,255));
+  border-radius: 25px;
+  transition: 1s;
+  animation: reverse;
+}
+body{
+  background:linear-gradient(45deg,rgb(3,53,189),rgba(255,255,255,0.938));
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.table{
+  margin: 213px  0px 10px 145px;
+  font-size: 30px;
+  color:#fff ;
+  position: static;
+  width: 795px;
+  border-width: 5px;
+  border-color: #fff;
+}
+.table .thead-dark th {
+  color: #fff;
+  background-color: #0c75ff;
+  border-color: #00a5fd;
+}
+</style>
+<body >
+    
+     <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">
+            <div class="rectangle">
+              <span id=navname><i><b>RESELLERS BAY</b></i></span>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/"><span>Home</span><span class="sr-only">(current)</span></a>
+            </li>
+            <li  class ="nav-item"><a class="nav-link" href="/aboutus"><span>About</span></a></li>
+            <li  class ="nav-item"><a class="nav-link" href="/contactus"><span>Contact</span></a></li>
+            
+              {% if user.is_authenticated %}
+          
+            <li  class ="nav-item"><a class="nav-link" href="accounts/logout"><span>Logout</span></a></li>
+            
+            <li class="nav-item ">
+              <a class="nav-link" href="/sell"><span>Sell</span></a>
+            </li>
+
+            {% else %}
+            <li class="nav-item ">
+              <a class="nav-link" href="/sell"><span>Sell</span></a>
+            </li>
+            
+            <li  class ="nav-item"><a class="nav-link" href="accounts/login"><span>Login</span></a></li>
+           
+            {% endif %}
+            
+          
+          
+         </ul>
+        
+            <!-- Just an image -->
+            <nav class="navbar navbar-light " >
+              <a class="navbar-brand" href="#" id="username">
+               {{user.first_name.0.upper}}               
+             </a>
+              </nav>
+        </div>
+      </nav>
+          
+      <div class="container">
+
+        <section id="listing" class="py-4">
+
+            <div class="row">
+                <div class="col-md-9">
+
+                    <div class="col-2">
+                        <h1>Quick View</h1>
+<!--                        <h4>-BY ROHAN SHELAR</h4>-->
+                        <br>
+                        <h4>RS:
+                          {{ product.price_a | addition:product.price_b | addition:product.price_c | addition:product.price_d | addition:product.price_e | addition:product.price_f }}/-</h4>
+
+
+
+
+                        <h3 text-alignment="center"><br><u>Product Detials </u> </h3><br>
+
+                        <p><b>email:{{product.email}},<br>
+                          Name: {{product.seller_name}}</b><br><b>Branch: {{product.branch}} </b><br><b>Year:  {{product.year}}</b><br><br><b>Total Price:
+                            {{ product.price_a | addition:product.price_b | addition:product.price_c | addition:product.price_d | addition:product.price_e | addition:product.price_f }}/-</b><br><br> <b>Description:</b>{{product.description}} </p>
+                    <a href="#inquiry" class="btn">Make an Inquiry</a>
+                    
+                    
+                  
+                    </div>
+                  
+                   
+
+                   <!-- Home Main Image -->
+          <img src="/media/{{product.bookset_image}}" alt="" class="img-main img-fluid mb-3">
+
+          <!-- Thumbnails -->
+          <div class="row mb-5 thumbs">
+            {% if product.image_a %}
+            <div class="col-md-2">
+              <a href="/media/{{product.image_a}}" data-lightbox="home-images">
+                <img src="/media/{{product.image_a}}" alt="img" class="img-fluid">
+              </a>
+            </div>
+            {% endif %}
+
+            {% if product.image_b %}
+            <div class="col-md-2">
+              <a href="/media/{{product.image_b}}" data-lightbox="home-images">
+                <img src="/media/{{product.image_b}}" alt="img" class="img-fluid">
+              </a>
+            </div>
+            {% endif %}
+
+            {% if product.image_c %}
+            <div class="col-md-2">
+              <a href="/media/{{product.image_c}}" data-lightbox="home-images">
+                <img src="/media/{{product.image_c}}" alt="img" class="img-fluid">
+              </a>
+            </div>
+            {% endif %}
+
+            {% if product.image_d %}
+            <div class="col-md-2">
+              <a href="/media/{{product.image_d}}" data-lightbox="home-images">
+                <img src="/media/{{product.image_d}}" alt="img" class="img-fluid">
+              </a>
+            </div>
+            {% endif %}
+
+            {% if product.image_e %}
+            <div class="col-md-2">
+              <a href="/media/{{product.image_e}}" data-lightbox="home-images">
+                <img src="/media/{{product.image_e}}" alt="img" class="img-fluid">
+              </a>
+            </div>
+            {% endif %}
+
+            {% if product.image_f %}
+            <div class="col-md-2">
+              <a href="/media/{{product.image_f}}" data-lightbox="home-images">
+                <img src="/media/{{product.image_f}}" alt="img" class="img-fluid">
+              </a>
+            </div>
+            {% endif %}
+                 
+                     </div>
+
+        </section>
+    </div>
+
+   
+        <div class="table" >
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Type of book</th>
+                        <th>price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if product.image_a %}
+                      <tr>
+                        <td>
+
+                          1
+
+                        </td>
+                        <td>
+
+                          {{product.book_name_a}}
+
+                        </td>
+                        <td>
+
+                          {{product.book_type_a}}
+
+                        </td>
+                        <td>
+
+                          {{product.price_a}}
+
+                        </td>
+
+
+                      </tr>
+                      {% endif %}
+                      {% if product.image_b %}
+                      <tr>
+                        <td>
+
+                          2
+
+                        </td>
+                        <td>
+
+                          {{product.book_name_b}}
+
+                        </td>
+                        <td>
+
+                          {{product.book_type_b}}
+
+                        </td>
+                        <td>
+
+                          {{product.price_b}}
+
+                        </td>
+
+
+                      </tr>
+                      {% endif %}
+                      {% if product.image_c %}
+                      <tr>
+                        <td>
+
+                          3
+
+                        </td>
+                        <td>
+
+                          {{product.book_name_c}}
+
+                        </td>
+                        <td>
+                          {{product.book_type_c}}
+
+                        </td>
+                        <td>
+
+                          {{product.price_c}}
+
+                        </td>
+                      </tr>
+                      {% endif %}
+                      {% if product.image_d %}
+                      <tr>
+                        <td>
+
+                          4
+
+                        </td>
+                        <td>
+
+                          {{product.book_name_d}}
+
+                        </td>
+                        <td>
+
+                          {{product.book_type_d}}
+
+                        </td>
+                        <td>
+
+                          {{product.price_d}}
+
+                        </td>
+                      </tr>
+                      {% endif %}
+                      {% if product.image_e %}
+                      <tr>
+                        <td>
+
+                          5
+
+                        </td>
+                        <td>
+
+                          {{product.book_name_e}}
+
+                        </td>
+                        <td>
+                          {{product.book_type_e}}
+
+                        </td>
+                        <td>
+
+                          {{product.price_e}}
+
+                        </td>
+                      </tr>
+                      {% endif %}
+                      <tr>
+                        {% if product.image_f %}
+                      <tr>
+                        <td>
+
+                          6
+
+                        </td>
+                        <td>
+
+                          {{product.book_name_f}}
+
+                        </td>
+                        <td>
+
+                          {{product.book_type_f}}
+
+                        </td>
+                        <td>
+
+                          {{product.price_f}}
+
+                        </td>
+
+
+                      </tr>
+                      {% endif %}
+
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+             
+
+
+
+            </div>
+    <div class="co" id="inquiry">
+      <h3>Inquiry Form</h3>
+      <form method="POST" action="{% url 'inquiry' %}" id="Dog">
+        {% csrf_token %}
+        <input type="hidden" class="comman" name="owner_mail" value="{{product.email}}"><br>
+   <div class="form-group">
+     <label for="name">Name</label>
+     <input type="text" class="form-control" class="comman" id="name" name="name" placeholder="Enter Your Name">
+   </div>
+           <div class="form-group">
+     <label for="name">Email</label>
+     <input type="email" class="form-control" class="comman" id="email" name="email" placeholder="Enter Your Email">
+   </div>
+           <div class="form-group">
+     <label for="name">Phone</label>
+     <input type="tel" class="form-control" id="phone" class="comman" name="phone" placeholder="Enter Your Phone Number">
+   </div>
+           <div class="form-group">
+    <div class="form-group">
+     <label for="desc">How May We Help You ?</label>
+     <textarea class="form-control" id="message" class="comman" name="message" rows="3"></textarea>
+   </div>
+ 
+   <button type="submit" style="margin-left: 294px;" class="btn btn-success">Submit</button>
+ </div>
+ </form>
+ 
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  
+    
+  
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/lightbox.min.js' %}"></script>
+    
+   
+
+
+
+
+<script>
+$("#Dog").on('submit',function(event){
+          alert("Message Sent ");  
+})
+</script>
+
+
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,24 @@
+<style>
+    .al{
+        display: inline-block;
+        
+       
+        margin-bottom: 2px;
+        background-color:red;
+        opacity: 70%;
+    }
+    #msg{
+        font-size: 20px;
+        color: white;
+    }
+</style>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="al">
+        <div class="alert alert-{{message.tags}} 00 " id="msg" role="alert">
+            {{message}}
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}

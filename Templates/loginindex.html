@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/loginstyle1.css' %}">
+    
+    <title>Sign in & Sign up Form</title>
+</head>
+<style>
+    #sign-up-btn:hover{
+        background:linear-gradient(45deg,rgb(255,45,220),rgb(15,46,218));
+        border: 0px;
+    }
+    #sign-in-btn:hover{
+        background:linear-gradient(45deg,rgb(255,45,220),rgb(15,46,218));
+        border: 0px;
+
+
+    }
+</style>
+<body>
+    
+    <div class="container">
+        
+
+
+        
+        <div class="forms-container">
+         
+            <div class="signin-signup">
+                <form action="login" method ="POST" class="sign-in-form">
+                    {% csrf_token %}
+                    {% include 'messages.html'%}
+                    <h2 class="title">Sign in</h2>
+                    
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="username" name="username" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="password" name="password" required/>
+                    </div>
+                    <input type="submit" value="Login" class="btn solid" />
+                    <div class="forgot">
+                         <span class="psw"><a href="{% url 'password_reset' %}">forgot password?</a></span>
+                  </div>
+                    <p class="social-text">Or Sign in with social platforms</p>
+                    <div class="social-media">
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </form>
+
+                <form action="register" method="POST" class="sign-up-form">
+                    {% csrf_token %}
+                    <h2 class="title">Sign up</h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="Full Name" name="first_name" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="Username" name="username" required/>
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" placeholder="Email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="please enter valid email" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password1" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="Must contain at least one  number and one uppercase and lowercase letter, and at least 8 or more characters" required/>
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Again Password" name="password2" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="Must contain at least one  number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+                    </div>
+
+
+                    
+                   
+
+
+                    <label>
+                        <input id="check_1" name="check_1" type="checkbox" required>
+                        <small>
+                            I read and agree to Terms and Conditions
+                        </small>
+                        </input>
+                        <div class="invalid-feedback"> You must check the box </div>
+                    </label>
+                    <input type="submit" class="btn" value="Sign up" />
+                    <p class="social-text">Or Sign up with social platforms</p>
+                    <div class="social-media">
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>New here ?</h3>
+                    <br>
+                    <br>
+                    <button class="btn transparent" id="sign-up-btn">
+              Sign up
+            </button>
+                    <button class="btn transparent" id="sign-up-btn" onclick="location.href='/'" >
+                            Go to home
+            </button>
+
+                </div>
+                <img src="{% static 'img/t1.svg' %}" class="image" alt="" />
+               
+            </div>
+            <div class="panel right-panel">
+                <div class="content">
+                    <h3>One of us ?</h3>
+                    <br>
+                    <br>
+                    <button class="btn transparent" id="sign-in-btn">
+              Sign in
+            </button>
+        </button>
+        <button class="btn transparent" id="sign-in-btn" onclick="location.href='/'" >
+                Go to home
+</button>
+
+                </div>
+                <img src="{% static 'img/a1.svg' %}" class="image" alt="" />
+                
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/app.js' %} "></script>
+    
+</body>
+
+</html>

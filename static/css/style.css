@@ -1,0 +1,163 @@
+
+*{
+    padding: 0px;
+    margin: 0px;
+   
+}
+
+.navbar-brand {
+    display: inline-block;
+    padding-top: 0px;
+    padding-bottom: 0rem;
+    margin-right: 0rem;
+}
+
+
+.navbar{
+    padding: 7px;
+  }
+.rectangle {
+    height: 59px;
+    width: 426px;
+    margin-left: 5px;
+    
+    border-radius: 25px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: linear-gradient(-45deg, rgb(248, 0, 248), rgb(250, 90, 255), rgb(247, 104, 204), rgb(115, 88, 233), rgb(7, 5, 146), rgb(8, 1, 48));
+ }
+#navname{
+      left: 60px;
+      top: 13px;
+      position: absolute;
+     
+      overflow: visible;
+      width: 317px;
+      white-space: nowrap;
+      text-align: center;
+      font-family: Acumin Pro;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 37px;
+      color: rgba(255,255,255,1);
+      letter-spacing: 0.6px;
+  }
+
+
+
+.nav-item {
+        text-align: left;
+        font-family: Segoe UI;
+        font-style: normal;
+        font-weight: normal;
+        padding: 9px;
+        font-size: 25px;
+        font-weight: 400;
+        
+    
+}
+.nav-item>a:hover{
+  background: linear-gradient(-45deg, rgb(25, 114, 230), rgb(234, 0, 255), rgb(25, 114, 230), rgb(234, 0, 255), rgb(25, 114, 230));
+}
+.nav-item>span{
+  color: #fff;
+}
+.re{
+    display: inline-block;
+    height: 27px;
+    
+    margin: 20px;
+    margin-left: 165px;
+    
+    border-radius: 25px;
+
+}
+
+.container{
+    max-width: 1220px;
+    max-height: 450px;
+    margin-top: 5px;
+    left: 50px;
+   
+   
+  }
+ 
+ span{
+    color: white;
+  }
+ .nav-item>span{
+   color:#fff;
+ }
+  #all{
+ 
+   width: 74px;
+   height: 36px;
+   
+   font-size: 20px;
+   font-weight: bold;
+   margin-top: 5px;
+ }
+  #info {
+   width: 120px;
+   height: 36px;
+   margin-left: 80px;
+   font-size: 20px;
+   font-weight: bold;
+  }
+  #comp {
+   width: 132px;
+   height: 36px;
+   margin-left: 80px;
+   font-size: 20px;
+   font-weight: bold;
+ }
+  #civil {
+   width: 90px;
+   height: 36px;
+   margin-left: 80px;
+   font-size: 20px;
+   font-weight: bold;
+ }
+  
+  #mech{
+   width: 136px;
+   height: 36px;
+   
+   margin-left: 80px;
+   
+   font-size: 20px;
+   font-weight: bold;
+ }
+ #instru{
+   width: 224px;
+   height: 36px;
+   margin-left: 80px;
+   
+   font-size: 20px;
+   font-weight: bold;
+ }
+ 
+ button{
+  background: linear-gradient( 45deg, rgba(255, 1, 221, 0.972), rgb(238, 8, 8), rgba(10, 33, 238, 0.933));
+    border-radius: 10px;
+    border: 0px;
+    color: rgb(235, 219, 250);
+ }
+ button:hover {
+  background: linear-gradient(45deg, rgba(10, 33, 238, 0.933), rgb(238, 8, 8), rgba(255, 1, 221, 0.972));
+  color: #ffff;
+  border: none;
+ 
+ }
+ 
+
+
+
+
+
+
+
+
+
+
+
+

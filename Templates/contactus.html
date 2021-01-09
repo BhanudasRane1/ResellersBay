@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Contact us</title>
+	<link rel="stylesheet" type="text/css" href="{% static '/css/contact_us_style.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+</head>
+<style>
+	
+	  body{
+		background:linear-gradient(45deg,rgb(3,53,189),rgba(255,255,255,0.938));
+		height: 100%;
+		margin: 0;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+	  }
+	  
+	.button {
+
+		padding: 8px;
+		color: black;
+		border: 0px;
+		margin: 5px;
+		font-weight: bolder;
+		font-size: 1rem;
+		background: linear-gradient(-60deg, rgb(25, 114, 230), rgb(234, 0, 255));;
+		text-align: center;
+		cursor: pointer;
+		width: 10%;
+		float: right;
+		
+
+
+	}
+	.button:hover{
+		background: linear-gradient(-30deg, rgb(234, 0, 255), rgb(25, 114, 230), rgb(234, 0, 255));
+	}
+</style>
+<body>
+	<div class="home">
+		<button type="button" class="button" onclick="location.href='/'">Home</button>
+	</div>
+	<div class="container">
+		
+		<div class="contact-box">
+			<div class="left"></div>
+			<div class="right">
+				<h2>Contact Us</h2>
+				<form action="/contactus/" method="post" id="Dog">{% csrf_token %}
+				<input type="text" class="field" placeholder="Your Name" name="name">
+				<input type="text" class="field" placeholder="Your Email" name="email">
+				<input type="text" class="field" placeholder="Phone" name="phone">
+				<textarea placeholder="Message" class="field" name="desc"></textarea>
+				<button class="btn" type="submit">Send</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+	
+<script>
+	$("#Dog").on('submit',function(event){
+			  alert("Message Sent to the owner ");  
+	})
+	</script>
+
+
+</body>
+</html>
