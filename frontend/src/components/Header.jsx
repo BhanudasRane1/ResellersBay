@@ -124,14 +124,7 @@ export default function Header() {
             Login
           </NavLink>
 
-          <div>
-            <SearchBox
-              label={null}
-              placeholder="Search by book name or branch"
-              value={searchValue}
-              handleSearch={setSearchValue}
-            />
-          </div>
+         
         </div>
       )}
     </header>

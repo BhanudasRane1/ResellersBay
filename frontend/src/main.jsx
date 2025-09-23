@@ -10,24 +10,28 @@ import "./index.css";
 import App from "./App.jsx";
 import Home from "./components/Home.jsx";
 import About from "./components/About.jsx";
-import Contact from "./components/Contact.jsx";
+import ContactForm from "./components/Contact.jsx";
 import Login from "./components/Login.jsx";
-import Sell from "./components/Sell.jsx";
+import SellForm from "./components/Sell.jsx";
+import SignUP from "./components/SignUP.jsx";
+import ForgotPassword from "./components/ForgotPassword.jsx";
 
 const routeDefinitions = createRoutesFromElements(
   <Route path="/" element={<App />}>
-    <Route index element={<Home />}  />
-    <Route path="/home" element={<Home />}  />
+    <Route index element={<Home />} />
+    <Route path="/home" element={<Home />} />
     <Route path="/about" element={<About />} />
-    <Route path="/contact" element={<Contact />} />
+    <Route path="/contact" element={<ContactForm />} />
     <Route path="/login" element={<Login />} />
-    <Route path="/sell" element={<Sell />} />
+    <Route path="/sell" element={<SellForm />} />
+    <Route path="/signup" element={<SignUP />} />
+    <Route path="/forgot-password" element={<ForgotPassword />} />
   </Route>
 );
 const appRouter = createBrowserRouter(routeDefinitions);
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-   <RouterProvider router={appRouter} />  
+    <RouterProvider router={appRouter} />
   </React.StrictMode>
 );
