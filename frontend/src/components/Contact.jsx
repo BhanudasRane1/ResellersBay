@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mail } from "lucide-react";
+import apiClient from "../api/apiclient";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -21,22 +22,24 @@ export default function ContactForm() {
     setStatus("loading");
 
     try {
-      // Example API request — replace with your backend endpoint
-      const res = await fetch("/api/contact", {
-        method: "POST",
+      await apiClient.post("contacts/", formData, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
       });
 
-      if (res.ok) {
-        setStatus("success");
-        setFormData({ name: "", email: "", phone: "", message: "" });
-      } else {
-        setStatus("error");
-      }
+      setStatus("success");
+      alert("Your message has been sent successfully!");
+      setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
-      console.error(error);
       setStatus("error");
+      // alert("There was an error sending your message. Please try again.");
+      setStatus("error");
+      if (error.response) {
+        console.error("Server error:", error.response.data); // <--- see exact reason
+        alert("Error: " + JSON.stringify(error.response.data));
+      } else {
+        console.error(error);
+        alert("There was an error sending your message. Please try again.");
+      }
     }
   };
 
@@ -90,7 +93,9 @@ export default function ContactForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Phone Number</label>
+            <label className="block text-sm font-medium mb-1">
+              Phone Number
+            </label>
             <input
               type="text"
               name="phone"
@@ -123,10 +128,14 @@ export default function ContactForm() {
           </button>
 
           {status === "success" && (
-            <p className="text-green-400 text-sm mt-2">Message sent successfully!</p>
+            <p className="text-green-400 text-sm mt-2">
+              Message sent successfully!
+            </p>
           )}
           {status === "error" && (
-            <p className="text-red-400 text-sm mt-2">Something went wrong. Please try again.</p>
+            <p className="text-red-400 text-sm mt-2">
+              Something went wrong. Please try again.
+            </p>
           )}
         </form>
       </div>
