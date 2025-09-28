@@ -18,7 +18,6 @@ export default function BookCard({
   const displayImg =
     image ||
     (books.length > 0 ? books[0].image : "https://via.placeholder.com/300x200");
-  console.log("BookCard render:", { id, year, image, books, displayImg });
   return (
     <div className="bg-gray-900 text-white rounded-md overflow-hidden">
       <img

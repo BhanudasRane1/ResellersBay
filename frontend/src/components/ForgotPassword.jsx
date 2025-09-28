@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Key } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import apiClient from "../api/apiClient"; // adjust path
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,14 +22,13 @@ export default function ForgotPassword() {
 
     setLoading(true);
     try {
-      // simulate API call — replace with real request
-      await new Promise((r) => setTimeout(r, 800));
+      const res = await apiClient.post("password-reset/", { email });
       setMsg(
         "If an account exists for this email, you'll receive a password reset link shortly."
       );
       setEmail("");
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError(err.response?.data?.error || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -57,11 +58,20 @@ export default function ForgotPassword() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@example.com"
-            className="w-full bg-black/70 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-400"
+            disabled={loading}
+            className="w-full bg-black/70 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50"
           />
 
-          {error && <div className="text-sm text-red-400">{error}</div>}
-          {msg && <div className="text-sm text-green-400">{msg}</div>}
+          {error && (
+            <div role="alert" className="text-sm text-red-400">
+              {error}
+            </div>
+          )}
+          {msg && (
+            <div role="alert" className="text-sm text-green-400">
+              {msg}
+            </div>
+          )}
 
           <button
             type="submit"

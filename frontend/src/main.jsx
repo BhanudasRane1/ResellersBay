@@ -19,11 +19,13 @@ import BookDetailsPage, {
   bookDetailsLoader,
   bookInquiryAction,
 } from "./components/BookDetailsPage.jsx";
-import BookInquiryForm from "./components/BookInquiryForm.jsx";
-import ErrorPage from "./components/errorResponse.jsx";
+import GlobalErrorPage from "./components/GlobalErrorPage.jsx";
+import ResetPasswordConfirm from "./components/ResetPasswordConfirm.jsx";
+import { ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const routeDefinitions = createRoutesFromElements(
-  <Route path="/" element={<App />}>
+  <Route path="/" element={<App />} errorElement={<GlobalErrorPage />}>
     <Route index element={<Home />} loader={homeLoader} />
     <Route path="/home" element={<Home />} />
     <Route path="/about" element={<About />} />
@@ -41,8 +43,11 @@ const routeDefinitions = createRoutesFromElements(
       path="/book/:id"
       element={<BookDetailsPage />}
       loader={bookDetailsLoader}
-      errorElement={<ErrorPage />}
       action={bookInquiryAction}
+    />
+    <Route
+      path="/password-reset-confirm/:uid/:token"
+      element={<ResetPasswordConfirm />}
     />
   </Route>
 );
@@ -51,5 +56,15 @@ const appRouter = createBrowserRouter(routeDefinitions);
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={appRouter} />
+    <ToastContainer
+      position="top-center"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      draggable
+      pauseOnHover
+      theme={localStorage.getItem("theme") === "dark" ? "dark" : "light"}
+      transition={Bounce}
+    />
   </React.StrictMode>
 );

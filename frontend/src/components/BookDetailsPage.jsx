@@ -35,6 +35,7 @@ export default function BookDetailsPage() {
             <BookInfoCard
               bookSet={bookSet}
               onInquiry={() => setShowInquiry(true)}
+              isAuthenticated={Boolean(localStorage.getItem("access"))}
             />
           )}
           {showInquiry && (
@@ -65,12 +66,9 @@ export default function BookDetailsPage() {
 // Loader to fetch bookset by id
 export async function bookDetailsLoader({ params }) {
   try {
-    console.log("Fetching bookset with id:", params.id);
     const res = await apiClient.get(`booksets/${params.id}/`);
-    console.log(res.data);
     return res.data;
   } catch (error) {
-    console.error("Error fetching bookset:", error);
     throw new Response("Failed to load book details", { status: 500 });
   }
 }

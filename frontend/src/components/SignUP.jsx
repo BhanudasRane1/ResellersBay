@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { User, AtSign, Lock } from "lucide-react";
+import apiClient from "../api/apiClient"; // <-- axios instance
 
 export default function SignUP() {
   const [fullName, setFullName] = useState("");
@@ -8,10 +9,12 @@ export default function SignUP() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     if (!fullName || !username || !email || !password || !confirm) {
       setError("Please fill all fields.");
       return;
@@ -20,8 +23,29 @@ export default function SignUP() {
       setError("Passwords do not match.");
       return;
     }
-    // TODO: replace with real sign-up logic
-    console.log({ fullName, username, email, password });
+
+    try {
+      setLoading(true);
+      const res = await apiClient.post("register/", {
+        fullName,
+        username,
+        email,
+        password,
+      });
+
+      // Save tokens in localStorage
+      localStorage.setItem("access", res.data.tokens.access);
+      localStorage.setItem("refresh", res.data.tokens.refresh);
+      console.log("Registration response:", res.data);
+
+      alert("Registration successful!");
+      window.location.href = "/"; // redirect to home or dashboard
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.error || "Signup failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,9 +115,10 @@ export default function SignUP() {
 
           <button
             type="submit"
-            className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded mt-2"
+            disabled={loading}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded mt-2 disabled:opacity-50"
           >
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
 
           <div className="text-center text-sm text-gray-400">
