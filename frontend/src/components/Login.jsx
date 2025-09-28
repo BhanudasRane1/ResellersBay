@@ -1,30 +1,38 @@
 import React, { useState } from "react";
-import apiClient from "../api/apiClient"; // <-- axios instance you created
+import apiClient from "../api/apiClient";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
+    if (!username || !password) {
+      toast.error("Please enter username and password");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await apiClient.post("token/", { username, password });
 
-      // Save tokens in localStorage
+      // Save tokens
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       localStorage.setItem("user", JSON.stringify({ username }));
 
-      alert("Login successful ✅", response.data);
-
-      // Redirect to homepage (or dashboard)
-      window.location.href = "/";
+      toast.success("Login successful!");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1200); // delay redirect so user sees toast
     } catch (err) {
-      console.error("Login failed ❌", err.response?.data || err.message);
-      setError("Invalid username or password.");
+      console.error("Login failed ", err.response?.data || err.message);
+      toast.error("Invalid username or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,6 +61,7 @@ export default function Login() {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full bg-gray-800 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-400"
+              disabled={loading}
             />
           </div>
 
@@ -70,16 +79,16 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               className="w-full bg-gray-800 text-white px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-400"
+              disabled={loading}
             />
           </div>
 
-          {error && <p className="text-red-400 text-sm">{error}</p>}
-
           <button
             type="submit"
-            className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded font-semibold"
+            disabled={loading}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded font-semibold disabled:opacity-50"
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
 
           <div className="flex items-center justify-center">

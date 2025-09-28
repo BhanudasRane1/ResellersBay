@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, BookOpenText } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import SearchBox from "./SearchBox";
@@ -95,15 +95,6 @@ export default function Header() {
           </NavLink>
         )}
       </nav>
-
-      {/* Search Bar (desktop) */}
-      <div className="hidden md:block">
-        <SearchBox
-          placeholder="Search by book name or branch"
-          value={searchValue}
-          handleSearch={setSearchValue}
-        />
-      </div>
 
       {/* Mobile Menu Button */}
       <button

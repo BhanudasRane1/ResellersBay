@@ -1,10 +1,36 @@
+// SellForm.jsx
 import React, { useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
-import apiClient from "../api/apiClient"; // adjust the path if needed
+import {
+  Form,
+  useLoaderData,
+  useActionData,
+  useNavigation,
+} from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import apiClient from "../api/apiClient";
 
 export default function SellForm() {
   const { branches, years, bookTypes } = useLoaderData();
+  const actionData = useActionData();
+  const navigation = useNavigation();
   const [books, setBooks] = useState([{ name: "", type: "", price: "" }]);
+
+  // Show toast messages when actionData updates
+  React.useEffect(() => {
+    if (actionData?.success) {
+      toast.success("BookSet submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+    if (actionData?.error) {
+      toast.error(`${actionData.error}`, {
+        position: "top-right",
+        autoClose: 4000,
+      });
+    }
+  }, [actionData]);
 
   const addBook = () => {
     if (books.length < 6)
@@ -167,9 +193,10 @@ export default function SellForm() {
         <div className="text-right">
           <button
             type="submit"
-            className="px-6 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600"
+            disabled={navigation.state === "submitting"}
+            className="px-6 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600 disabled:opacity-50"
           >
-            Submit
+            {navigation.state === "submitting" ? "Submitting..." : "Submit"}
           </button>
         </div>
       </Form>
@@ -206,17 +233,13 @@ export async function sellAction({ request }) {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    alert("BookSet submitted successfully!");
     return { success: true, data: res.data };
   } catch (err) {
+    console.error("Error submitting form:", err);
     if (err.response) {
-      alert("Error: " + JSON.stringify(err.response.data));
-      throw new Response(JSON.stringify(err.response.data), {
-        status: err.response.status,
-      });
+      return { error: JSON.stringify(err.response.data) };
     } else {
-      alert("Unexpected error: " + err.message);
-      throw new Response(err.message, { status: 500 });
+      return { error: "Unexpected error occurred. Try again later." };
     }
   }
 }

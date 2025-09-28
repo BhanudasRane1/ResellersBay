@@ -1,6 +1,3 @@
-import { useLoaderData } from "react-router-dom";
-import apiClient from "../api/apiClient";
-
 export default function BranchSpotlight({ branches }) {
   return (
     <section>

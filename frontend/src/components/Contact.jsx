@@ -1,6 +1,8 @@
 // ContactForm.jsx
-import { Form, useActionData, useNavigation, redirect } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 import { Mail } from "lucide-react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import apiClient from "../api/apiClient";
 
 // --- component ---
@@ -8,6 +10,24 @@ export default function ContactForm() {
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+
+  useEffect(() => {
+    if (actionData?.success) {
+      toast.success(
+        "Message sent successfully! We will get back to you soon.",
+        {
+          position: "top-right",
+        }
+      );
+    } else if (actionData?.error) {
+      toast.error(
+        `Error sending message: ${JSON.stringify(actionData.error)}`,
+        {
+          position: "top-right",
+        }
+      );
+    }
+  }, [actionData]);
 
   return (
     <section className="bg-black text-white py-16">
@@ -85,11 +105,6 @@ export default function ContactForm() {
             {isSubmitting ? "Submitting..." : "Submit Inquiry"}
           </button>
         </Form>
-
-        {actionData?.success &&
-          alert("Message sent successfully! We will get back to you soon.")}
-        {actionData?.error &&
-          alert("Error sending message: " + JSON.stringify(actionData.error))}
       </div>
     </section>
   );
@@ -107,7 +122,6 @@ export async function contactAction({ request }) {
 
   try {
     await apiClient.post("contacts/", payload);
-    // return inline success OR redirect
     return { success: true };
   } catch (error) {
     if (error.response) {

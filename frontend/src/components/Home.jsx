@@ -8,46 +8,54 @@ import { useLoaderData } from "react-router-dom";
 import apiClient from "../api/apiClient";
 
 export default function Home() {
-  const [searchValue, setSearchValue] = useState("");
   const { books, branches, years } = useLoaderData();
 
+  const [searchValue, setSearchValue] = useState("");
   const [filteredBooks, setFilteredBooks] = useState(books);
 
-  // Home.jsx (filter function)
+  // Runtime search filtering
+  const handleSearch = (value) => {
+    setSearchValue(value);
+    const lowerValue = value.toLowerCase();
+
+    const result = books.filter((book) => {
+      const bookName = book.name?.toLowerCase() || "";
+      const branchName =
+        typeof book.branch === "object"
+          ? book.branch.name.toLowerCase()
+          : (book.branch || "").toLowerCase();
+      const yearName =
+        typeof book.year === "object"
+          ? book.year.name.toLowerCase()
+          : (book.year || "").toLowerCase();
+
+      return (
+        bookName.includes(lowerValue) ||
+        branchName.includes(lowerValue) ||
+        yearName.includes(lowerValue)
+      );
+    });
+
+    setFilteredBooks(result);
+  };
+
   const handleApplyFilters = ({
     branches: selectedBranchIds = [],
     years: selectedYearIds = [],
   }) => {
-    let result = books;
-    console.log("Applying filters:", { selectedBranchIds, selectedYearIds });
-    // Convert selected branch ids -> names (from branches list)
-    const selectedBranchNames = selectedBranchIds
-      .map((id) => branches.find((b) => b.id === id))
-      .filter(Boolean)
-      .map((b) => b.name);
+    let result = filteredBooks;
 
-    // Convert selected year ids -> names
-    const selectedYearNames = selectedYearIds
-      .map((id) => years.find((y) => y.id === id))
-      .filter(Boolean)
-      .map((y) => y.name);
-
-    console.log("Names after applying", {
-      selectedBranchNames,
-      selectedYearNames,
-    });
     if (selectedBranchIds.length > 0) {
       result = result.filter((book) => {
-        // book.branch could be number (id) OR string (name) OR object {id,name}
         if (typeof book.branch === "number")
           return selectedBranchIds.includes(book.branch);
         if (typeof book.branch === "string")
-          return selectedBranchNames.includes(book.branch);
-        if (book.branch && typeof book.branch === "object")
-          return (
-            selectedBranchIds.includes(book.branch.id) ||
-            selectedBranchNames.includes(book.branch.name)
+          return selectedBranchIds.some(
+            (id) => branches.find((b) => b.id === id)?.name === book.branch
           );
+        if (book.branch && typeof book.branch === "object") {
+          return selectedBranchIds.includes(book.branch.id);
+        }
         return false;
       });
     }
@@ -57,12 +65,12 @@ export default function Home() {
         if (typeof book.year === "number")
           return selectedYearIds.includes(book.year);
         if (typeof book.year === "string")
-          return selectedYearNames.includes(book.year);
-        if (book.year && typeof book.year === "object")
-          return (
-            selectedYearIds.includes(book.year.id) ||
-            selectedYearNames.includes(book.year.name)
+          return selectedYearIds.some(
+            (id) => years.find((y) => y.id === id)?.name === book.year
           );
+        if (book.year && typeof book.year === "object") {
+          return selectedYearIds.includes(book.year.id);
+        }
         return false;
       });
     }
@@ -72,6 +80,7 @@ export default function Home() {
 
   const handleClearFilters = () => {
     setFilteredBooks(books);
+    setSearchValue("");
   };
 
   return (
@@ -79,13 +88,15 @@ export default function Home() {
       <div className="w-[80%] mx-auto py-6">
         <WelcomeBanner />
 
-        <div className="block md:hidden mt-6 mb-4">
-          <SearchBox
-            label={null}
-            placeholder="Search by book name or branch"
-            value={searchValue}
-            handleSearch={setSearchValue}
-          />
+        {/* Centered SearchBox */}
+        <div className="flex justify-center mt-6 mb-6">
+          <div className="w-full  max-w-3xl justify-items-center">
+            <SearchBox
+              placeholder="Search by branch or year"
+              value={searchValue}
+              handleSearch={handleSearch}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mt-6">

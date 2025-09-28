@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { User, AtSign, Lock } from "lucide-react";
-import apiClient from "../api/apiClient"; // <-- axios instance
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import apiClient from "../api/apiClient"; // axios instance
 
 export default function SignUP() {
   const [fullName, setFullName] = useState("");
@@ -8,19 +10,17 @@ export default function SignUP() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (!fullName || !username || !email || !password || !confirm) {
-      setError("Please fill all fields.");
+      toast.error("Please fill all fields.", { position: "top-right" });
       return;
     }
     if (password !== confirm) {
-      setError("Passwords do not match.");
+      toast.error("Passwords do not match.", { position: "top-right" });
       return;
     }
 
@@ -38,11 +38,21 @@ export default function SignUP() {
       localStorage.setItem("refresh", res.data.tokens.refresh);
       console.log("Registration response:", res.data);
 
-      alert("Registration successful!");
-      window.location.href = "/"; // redirect to home or dashboard
+      toast.success("Registration successful!", {
+        position: "top-right",
+        autoClose: 2500,
+      });
+
+      // Redirect after short delay
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2500);
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.error || "Signup failed. Try again.");
+      toast.error(err.response?.data?.error || "Signup failed. Try again.", {
+        position: "top-right",
+        autoClose: 4000,
+      });
     } finally {
       setLoading(false);
     }
@@ -110,8 +120,6 @@ export default function SignUP() {
               className="w-full pl-11 pr-3 py-2 bg-black/60 border border-gray-700 rounded text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
           </div>
-
-          {error && <div className="text-sm text-red-400">{error}</div>}
 
           <button
             type="submit"

@@ -1,34 +1,30 @@
 import React, { useState } from "react";
 import { Key } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import apiClient from "../api/apiClient"; // adjust path
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import apiClient from "../api/apiClient";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setMsg("");
 
     if (!email || !email.includes("@")) {
-      setError("Please enter a valid email address.");
+      toast.error("Please enter a valid email address.");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await apiClient.post("password-reset/", { email });
-      setMsg(
-        "If an account exists for this email, you'll receive a password reset link shortly."
+      await apiClient.post("password-reset/", { email });
+      toast.success(
+        "If an account exists for this email, you'll receive a reset link shortly."
       );
       setEmail("");
     } catch (err) {
-      setError(err.response?.data?.error || "Something went wrong");
+      toast.error(err.response?.data?.error || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -61,17 +57,6 @@ export default function ForgotPassword() {
             disabled={loading}
             className="w-full bg-black/70 border border-gray-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50"
           />
-
-          {error && (
-            <div role="alert" className="text-sm text-red-400">
-              {error}
-            </div>
-          )}
-          {msg && (
-            <div role="alert" className="text-sm text-green-400">
-              {msg}
-            </div>
-          )}
 
           <button
             type="submit"

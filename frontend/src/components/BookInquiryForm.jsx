@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { X } from "lucide-react";
 import { Form, useActionData, useNavigation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function BookInquiryForm({ book = {}, onCancel }) {
   const { id, title } = book;
@@ -9,17 +10,14 @@ export default function BookInquiryForm({ book = {}, onCancel }) {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const [err, setErr] = useState("");
-  const [ok, setOk] = useState("");
-
   useEffect(() => {
     if (actionData) {
       if (actionData.success) {
-        setOk("Inquiry sent successfully.");
-        setErr("");
+        toast.success("Inquiry sent successfully!", { position: "top-right" });
       } else {
-        setErr(actionData.error);
-        setOk("");
+        toast.error(actionData.error || "Failed to send inquiry.", {
+          position: "top-right",
+        });
       }
     }
   }, [actionData]);
@@ -75,9 +73,6 @@ export default function BookInquiryForm({ book = {}, onCancel }) {
               required
             />
           </div>
-
-          {err && <div className="text-sm text-red-400">{err}</div>}
-          {ok && <div className="text-sm text-green-400">{ok}</div>}
 
           <div className="flex items-center gap-3 pt-1">
             <button
