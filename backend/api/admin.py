@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Seller, BookSet, Book, Branch, Year, BookType, Contact
+from .models import Seller, BookSet, Book, Branch, Year, BookType, Contact,BookInquiry
 
 
 # Inline Books inside BookSet
@@ -52,3 +52,11 @@ class BookTypeAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "phone", "created_at")
     search_fields = ("name", "email", "phone")
+
+
+@admin.register(BookInquiry)
+class BookInquiryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'bookset', 'name', 'email', 'created_at')
+    search_fields = ('name', 'email', 'bookset__id', 'bookset__seller__name')
+    list_filter = ('created_at', 'bookset')
+    readonly_fields = ('created_at',)

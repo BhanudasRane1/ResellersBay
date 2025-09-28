@@ -1,134 +1,49 @@
-import React, { useState, useEffect } from "react";
-import apiClient from "../api/apiclient";
+import React, { useState } from "react";
+import { Form, useLoaderData } from "react-router-dom";
+import apiClient from "../api/apiClient"; // adjust the path if needed
 
 export default function SellForm() {
-  // --- Seller Info ---
-  const [seller, setSeller] = useState({ name: "", email: "", mobile: "" });
-
-  const handleSellerChange = (field, value) => {
-    setSeller({ ...seller, [field]: value });
-  };
-
-  // --- Dropdown Options ---
-  const [branches, setBranches] = useState([]);
-  const [years, setYears] = useState([]);
-  const [bookTypes, setBookTypes] = useState([]);
-
-  const [selectedBranch, setSelectedBranch] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const [booksetImage, setBooksetImage] = useState(null);
-
-  // --- Books ---
-  const [books, setBooks] = useState([
-    { name: "", type: "", price: "", image: null },
-  ]);
-
-  const handleBookChange = (index, field, value) => {
-    const updated = [...books];
-    updated[index][field] = value;
-    setBooks(updated);
-  };
+  const { branches, years, bookTypes } = useLoaderData();
+  const [books, setBooks] = useState([{ name: "", type: "", price: "" }]);
 
   const addBook = () => {
-    if (books.length < 6) {
-      setBooks([...books, { name: "", type: "", price: "", image: null }]);
-    }
+    if (books.length < 6)
+      setBooks([...books, { name: "", type: "", price: "" }]);
   };
 
   const removeBook = (index) => {
     setBooks(books.filter((_, i) => i !== index));
   };
 
-  // --- Description ---
-  const [description, setDescription] = useState("");
-
-  // --- Fetch dropdown data ---
-  useEffect(() => {
-    Promise.all([
-      apiClient.get("/branches/"),
-      apiClient.get("/years/"),
-      apiClient.get("/booktypes/"),
-    ]).then(([bRes, yRes, tRes]) => {
-      setBranches(bRes.data);
-      setYears(yRes.data);
-      setBookTypes(tRes.data);
-    });
-  }, []);
-
-  // --- Submit ---
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-
-    // Seller Info
-    formData.append("seller_name", seller.name);
-    formData.append("seller_email", seller.email);
-    formData.append("seller_mobile", seller.mobile);
-
-    // BookSet Info
-    formData.append("branch", selectedBranch);
-    formData.append("year", selectedYear);
-    formData.append("description", description);
-    if (booksetImage) formData.append("bookset_image", booksetImage);
-
-    // Books
-    books.forEach((book, index) => {
-      formData.append(`books[${index}][name]`, book.name);
-      formData.append(`books[${index}][book_type]`, book.type);
-      formData.append(`books[${index}][price]`, book.price);
-      if (book.image) formData.append(`books[${index}][image]`, book.image);
-    });
-
-    try {
-      await apiClient.post("booksets/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      alert("Book listing submitted successfully!");
-      // reset form
-      setSeller({ name: "", email: "", mobile: "" });
-      setSelectedBranch("");
-      setSelectedYear("");
-      setBooksetImage(null);
-      setBooks([{ name: "", type: "", price: "", image: null }]);
-      setDescription("");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to submit listing.");
-    }
-  };
-
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-900 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-6">Sell Your Books</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <Form method="post" encType="multipart/form-data" className="space-y-6">
         {/* Seller Info */}
         <div className="bg-gray-800 p-4 rounded-lg">
           <h3 className="font-bold mb-4">Seller Information</h3>
           <div className="grid md:grid-cols-3 gap-4">
             <input
+              name="seller_name"
               type="text"
               placeholder="Name"
-              value={seller.name}
-              onChange={(e) => handleSellerChange("name", e.target.value)}
-              className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
               required
+              className="w-full p-2 rounded bg-black border border-gray-700"
             />
             <input
+              name="seller_email"
               type="email"
               placeholder="Email"
-              value={seller.email}
-              onChange={(e) => handleSellerChange("email", e.target.value)}
-              className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
               required
+              className="w-full p-2 rounded bg-black border border-gray-700"
             />
             <input
+              name="seller_mobile"
               type="text"
               placeholder="Mobile"
-              value={seller.mobile}
-              onChange={(e) => handleSellerChange("mobile", e.target.value)}
-              className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
               required
+              className="w-full p-2 rounded bg-black border border-gray-700"
             />
           </div>
         </div>
@@ -138,10 +53,9 @@ export default function SellForm() {
           <h3 className="font-bold mb-4">Book Set Details</h3>
           <div className="grid md:grid-cols-2 gap-4">
             <select
-              value={selectedBranch}
-              onChange={(e) => setSelectedBranch(e.target.value)}
-              className="w-full p-2 rounded bg-black border border-gray-700"
+              name="branch"
               required
+              className="w-full p-2 rounded bg-black border border-gray-700"
             >
               <option value="">Select Branch</option>
               {branches.map((b) => (
@@ -150,12 +64,10 @@ export default function SellForm() {
                 </option>
               ))}
             </select>
-
             <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full p-2 rounded bg-black border border-gray-700"
+              name="year"
               required
+              className="w-full p-2 rounded bg-black border border-gray-700"
             >
               <option value="">Select Year</option>
               {years.map((y) => (
@@ -170,40 +82,33 @@ export default function SellForm() {
             <label className="block mb-2">Upload BookSet Image</label>
             <input
               type="file"
-              onChange={(e) => setBooksetImage(e.target.files[0])}
+              name="bookset_image"
               className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0 file:text-sm
-                file:font-semibold file:bg-teal-500 file:text-white
-                hover:file:bg-teal-600"
+                    file:rounded-full file:border-0 file:text-sm
+                    file:font-semibold file:bg-teal-500 file:text-white
+                    hover:file:bg-teal-600"
             />
           </div>
         </div>
 
-        {/* Individual Books */}
+        {/* Books */}
         <div className="bg-gray-800 p-4 rounded-lg">
           <h3 className="font-bold mb-4">Individual Books</h3>
-          {books.map((book, index) => (
+          {books.map((_, index) => (
             <div
               key={index}
               className="grid md:grid-cols-4 gap-4 mb-4 items-center"
             >
               <input
-                type="text"
+                name={`books[${index}][name]`}
                 placeholder="Book Name"
-                value={book.name}
-                onChange={(e) =>
-                  handleBookChange(index, "name", e.target.value)
-                }
-                className="w-full p-2 rounded bg-black border border-gray-700"
                 required
+                className="w-full p-2 rounded bg-black border border-gray-700"
               />
               <select
-                value={book.type}
-                onChange={(e) =>
-                  handleBookChange(index, "type", e.target.value)
-                }
-                className="w-full p-2 rounded bg-black border border-gray-700"
+                name={`books[${index}][book_type]`}
                 required
+                className="w-full p-2 rounded bg-black border border-gray-700"
               >
                 <option value="">Book Type</option>
                 {bookTypes.map((t) => (
@@ -213,20 +118,15 @@ export default function SellForm() {
                 ))}
               </select>
               <input
+                name={`books[${index}][price]`}
                 type="number"
                 placeholder="Price"
-                value={book.price}
-                onChange={(e) =>
-                  handleBookChange(index, "price", e.target.value)
-                }
-                className="w-full p-2 rounded bg-black border border-gray-700"
                 required
+                className="w-full p-2 rounded bg-black border border-gray-700"
               />
               <input
                 type="file"
-                onChange={(e) =>
-                  handleBookChange(index, "image", e.target.files[0])
-                }
+                name={`books[${index}][image]`}
                 className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4
                   file:rounded-full file:border-0 file:text-sm
                   file:font-semibold file:bg-teal-500 file:text-white
@@ -247,7 +147,7 @@ export default function SellForm() {
             <button
               type="button"
               onClick={addBook}
-              className="mt-2 px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700"
+              className="mt-2 px-4 py-2 bg-teal-600 text-white rounded"
             >
               + Add Book
             </button>
@@ -258,23 +158,65 @@ export default function SellForm() {
         <div className="bg-gray-800 p-4 rounded-lg">
           <h3 className="font-bold mb-4">Description</h3>
           <textarea
+            name="description"
             rows="4"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
             className="w-full p-2 rounded bg-black border border-gray-700"
           ></textarea>
         </div>
 
-        {/* Submit */}
         <div className="text-right">
           <button
             type="submit"
-            className="px-6 py-2 bg-teal-500 text-white font-semibold rounded-lg shadow hover:bg-teal-600"
+            className="px-6 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600"
           >
             Submit
           </button>
         </div>
-      </form>
+      </Form>
     </div>
   );
+}
+
+// Loader: fetch dropdown data
+export async function sellLoader() {
+  try {
+    const [bRes, yRes, tRes] = await Promise.all([
+      apiClient.get("branches/"),
+      apiClient.get("years/"),
+      apiClient.get("booktypes/"),
+    ]);
+
+    return {
+      branches: bRes.data,
+      years: yRes.data,
+      bookTypes: tRes.data,
+    };
+  } catch (err) {
+    console.error("Error loading form data:", err);
+    throw new Response("Failed to load data", { status: 500 });
+  }
+}
+
+// Action: submit form data
+export async function sellAction({ request }) {
+  const formData = await request.formData();
+
+  try {
+    const res = await apiClient.post("booksets/", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    alert("BookSet submitted successfully!");
+    return { success: true, data: res.data };
+  } catch (err) {
+    if (err.response) {
+      alert("Error: " + JSON.stringify(err.response.data));
+      throw new Response(JSON.stringify(err.response.data), {
+        status: err.response.status,
+      });
+    } else {
+      alert("Unexpected error: " + err.message);
+      throw new Response(err.message, { status: 500 });
+    }
+  }
 }

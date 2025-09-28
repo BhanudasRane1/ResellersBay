@@ -3,7 +3,9 @@ export default function FilterSideBar() {
   return (
     <aside className="bg-[#111] text-white p-4 rounded-md w-full md:w-64">
       <h2 className="text-lg font-bold mb-2">Filter Books</h2>
-      <p className="text-sm text-gray-400 mb-4">Narrow down your search results.</p>
+      <p className="text-sm text-gray-400 mb-4">
+        Narrow down your search results.
+      </p>
 
       {/* Branches */}
       <div className="mb-6">
@@ -13,16 +15,16 @@ export default function FilterSideBar() {
             <input type="radio" name="branch" defaultChecked /> All Branches
           </label>
           <label className="flex items-center gap-2">
-            <input type="radio" name="branch" /> BE
+            <input type="radio" name="branch" /> Information Technology
           </label>
           <label className="flex items-center gap-2">
-            <input type="radio" name="branch" /> TE
+            <input type="radio" name="branch" /> Mechanical Engineering
           </label>
           <label className="flex items-center gap-2">
-            <input type="radio" name="branch" /> SE
+            <input type="radio" name="branch" /> Civil Engineering
           </label>
           <label className="flex items-center gap-2">
-            <input type="radio" name="branch" /> FE
+            <input type="radio" name="branch" /> Electrical Engineering
           </label>
         </div>
       </div>

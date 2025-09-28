@@ -5,7 +5,7 @@ export default function BookInfoCard({ bookSet, onInquiry }) {
   return (
     <div className="bg-gray-900 rounded-md p-6 shadow-lg">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Price: ₹{bookSet.price}</h3>
+        <h3 className="text-lg font-semibold">Price: ₹{bookSet.total_price}</h3>
         <button
           onClick={() => onInquiry && onInquiry()}
           className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded"
@@ -33,11 +33,21 @@ export default function BookInfoCard({ bookSet, onInquiry }) {
             </a>
           </div>
 
+          <div className="text-gray-400">Mobile Number:</div>
+          <div className="flex items-center gap-2">
+            <a
+              href={`mailto:${bookSet.seller.mobile}`}
+              className="text-teal-300 hover:underline"
+            >
+              {bookSet.seller.mobile}
+            </a>
+          </div>
+
           <div className="text-gray-400">Branch:</div>
-          <div>{bookSet.seller.branch}</div>
+          <div>{bookSet.branch}</div>
 
           <div className="text-gray-400">Year:</div>
-          <div>{bookSet.seller.year}</div>
+          <div>{bookSet.year}</div>
         </div>
       </div>
 

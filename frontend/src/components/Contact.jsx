@@ -1,47 +1,13 @@
-import { useState } from "react";
+// ContactForm.jsx
+import { Form, useActionData, useNavigation, redirect } from "react-router-dom";
 import { Mail } from "lucide-react";
-import apiClient from "../api/apiclient";
+import apiClient from "../api/apiClient";
 
+// --- component ---
 export default function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const [status, setStatus] = useState(null);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("loading");
-
-    try {
-      await apiClient.post("contacts/", formData, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      setStatus("success");
-      alert("Your message has been sent successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      setStatus("error");
-      // alert("There was an error sending your message. Please try again.");
-      setStatus("error");
-      if (error.response) {
-        console.error("Server error:", error.response.data); // <--- see exact reason
-        alert("Error: " + JSON.stringify(error.response.data));
-      } else {
-        console.error(error);
-        alert("There was an error sending your message. Please try again.");
-      }
-    }
-  };
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <section className="bg-black text-white py-16">
@@ -65,14 +31,12 @@ export default function ContactForm() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <Form method="post" className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
               type="text"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
               placeholder="Your Name"
               className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
               required
@@ -84,8 +48,6 @@ export default function ContactForm() {
             <input
               type="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
               placeholder="your.email@example.com"
               className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
               required
@@ -99,8 +61,6 @@ export default function ContactForm() {
             <input
               type="text"
               name="phone"
-              value={formData.phone}
-              onChange={handleChange}
               placeholder="(123) 456-7890"
               className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
             />
@@ -111,8 +71,6 @@ export default function ContactForm() {
             <textarea
               rows="4"
               name="message"
-              value={formData.message}
-              onChange={handleChange}
               placeholder="Enter your message here..."
               className="w-full p-2 rounded bg-black border border-gray-700 focus:outline-none focus:border-teal-400"
               required
@@ -122,23 +80,39 @@ export default function ContactForm() {
           <button
             type="submit"
             className="w-full bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 rounded transition"
-            disabled={status === "loading"}
+            disabled={isSubmitting}
           >
-            {status === "loading" ? "Submitting..." : "Submit Inquiry"}
+            {isSubmitting ? "Submitting..." : "Submit Inquiry"}
           </button>
+        </Form>
 
-          {status === "success" && (
-            <p className="text-green-400 text-sm mt-2">
-              Message sent successfully!
-            </p>
-          )}
-          {status === "error" && (
-            <p className="text-red-400 text-sm mt-2">
-              Something went wrong. Please try again.
-            </p>
-          )}
-        </form>
+        {actionData?.success &&
+          alert("Message sent successfully! We will get back to you soon.")}
+        {actionData?.error &&
+          alert("Error sending message: " + JSON.stringify(actionData.error))}
       </div>
     </section>
   );
+}
+
+// --- action for handling form submission ---
+export async function contactAction({ request }) {
+  const formData = await request.formData();
+  const payload = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    message: formData.get("message"),
+  };
+
+  try {
+    await apiClient.post("contacts/", payload);
+    // return inline success OR redirect
+    return { success: true };
+  } catch (error) {
+    if (error.response) {
+      return { success: false, error: error.response.data };
+    }
+    return { success: false, error: "Unexpected error" };
+  }
 }

@@ -1,13 +1,9 @@
 // BookListings.jsx
+import { useLoaderData } from "react-router-dom";
 import BookCard from "./BookCard";
 
-export default function BookListings() {
-  const books = [
-    { id: 1, title: "Advanced Thermodynamics Set", year: "BE (Final Year)", price: 2500, img: "https://picsum.photos/300/200?4" },
-    { id: 2, title: "Data Structures & Algorithms", year: "TE (Third Year)", price: 1800, img: "https://picsum.photos/300/200?5" },
-    { id: 3, title: "Circuit Theory Essentials", year: "SE (Second Year)", price: 1500, img: "https://picsum.photos/300/200?6" },
-  ];
-
+// --- component ---
+export default function BookListings({ books }) {
   return (
     <section className="mt-6">
       <h2 className="text-xl font-bold mb-4">All Book Listings</h2>

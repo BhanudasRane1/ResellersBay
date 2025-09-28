@@ -1,10 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.db import transaction
-from .models import Branch, Year, BookType, BookSet, Book, Seller,Contact
-from .serializers import BranchSerializer, YearSerializer, BookTypeSerializer, BookSetSerializer,ContactSerializer
+from .models import Branch, Year, BookType, BookSet, Book, Seller,Contact,BookInquiry
+from .serializers import BranchSerializer, YearSerializer, BookTypeSerializer, BookSetSerializer,ContactSerializer,BookInquirySerializer
 import re
 import json
+from rest_framework.permissions import AllowAny
+
 
 
 class BranchViewSet(viewsets.ReadOnlyModelViewSet):
@@ -145,8 +147,11 @@ class BookSetViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-
-
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all().order_by("-created_at")
     serializer_class = ContactSerializer
+
+class BookInquiryViewSet(viewsets.ModelViewSet):
+    queryset = BookInquiry.objects.all()
+    serializer_class = BookInquirySerializer
+    permission_classes = [AllowAny]  # you can restrict to authenticated users if needed

@@ -1,5 +1,4 @@
-
-export default function BookListTable({ items = [] }) {
+export default function BookListTable({ items }) {
   return (
     <div className="bg-gray-900 rounded-md p-6 shadow-lg">
       <h3 className="text-lg font-semibold mb-4">Individual Books</h3>
@@ -18,8 +17,12 @@ export default function BookListTable({ items = [] }) {
               <tr key={it.id} className="border-t border-gray-800">
                 <td className="py-3 px-3 text-sm text-gray-200">{it.id}</td>
                 <td className="py-3 px-3 text-sm text-gray-200">{it.name}</td>
-                <td className="py-3 px-3 text-sm text-gray-200">{it.type}</td>
-                <td className="py-3 px-3 text-sm text-gray-200 text-right">₹ {it.price}</td>
+                <td className="py-3 px-3 text-sm text-gray-200">
+                  {it.book_type}
+                </td>
+                <td className="py-3 px-3 text-sm text-gray-200 text-right">
+                  ₹ {it.price}
+                </td>
               </tr>
             ))}
           </tbody>
