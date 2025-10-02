@@ -112,7 +112,7 @@ export default function Home() {
 
           {/* Right Content */}
           <div className="flex-1 space-y-8">
-            <BranchSpotlight branches={branches} />
+            {/* <BranchSpotlight branches={branches} /> */}
             {filteredBooks.length > 0 ? (
               <BookListings books={filteredBooks} />
             ) : (
