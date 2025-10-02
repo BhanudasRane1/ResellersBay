@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&display=swap");
+
+@import "tailwindcss";
+
+/* ensure the document root fills the viewport and no default margins */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* ensure consistent box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000; 
+  color: #fff; 
+}
+
+@theme{
+    --color-primary: #00A895;
+}
+
+
+
+
