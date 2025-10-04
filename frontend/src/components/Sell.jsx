@@ -78,6 +78,14 @@ export default function SellForm() {
         <div className="bg-gray-800 p-4 rounded-lg">
           <h3 className="font-bold mb-4">Book Set Details</h3>
           <div className="grid md:grid-cols-2 gap-4">
+            <input
+              name="bookset_name"
+              type="text"
+              placeholder="Book Set Name"
+              required
+              className="w-full p-2 rounded bg-black border border-gray-700"
+            />
+
             <select
               name="branch"
               required
@@ -110,9 +118,9 @@ export default function SellForm() {
               type="file"
               name="bookset_image"
               className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4
-                    file:rounded-full file:border-0 file:text-sm
-                    file:font-semibold file:bg-teal-500 file:text-white
-                    hover:file:bg-teal-600"
+            file:rounded-full file:border-0 file:text-sm
+            file:font-semibold file:bg-teal-500 file:text-white
+            hover:file:bg-teal-600"
             />
           </div>
         </div>

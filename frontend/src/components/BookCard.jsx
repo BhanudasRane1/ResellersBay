@@ -8,30 +8,36 @@ export default function BookCard({
   image,
   total_price,
   books,
+  bookset_name,
 }) {
   const navigate = useNavigate();
 
   const openDetails = () => {
-    // navigate to book details page; adjust route as needed
     navigate(`/book/${id}`);
   };
+
   const displayImg =
     image ||
     (books.length > 0 ? books[0].image : "https://via.placeholder.com/300x200");
+
   return (
-    <div className="bg-gray-900 text-white rounded-md overflow-hidden">
+    <div className="bg-gray-900 text-white rounded-md overflow-hidden flex flex-col">
       <img
         src={displayImg}
         alt="book set"
         className="w-full h-40 object-cover"
       />
-      <div className="p-3">
-        <h3 className="font-semibold text-lg">{branch}</h3>
+      <div className="p-3 flex flex-col flex-1">
+        <h2 className="text-xl font-bold mb-1">{bookset_name}</h2>
+
+        <p className="text-sm">{branch}</p>
         <p className="text-sm text-gray-400">{year}</p>
         <p className="text-green-400 font-semibold mt-2">₹ {total_price}</p>
+
+        {/* Button always at bottom */}
         <button
           onClick={openDetails}
-          className="bg-teal-500 hover:bg-teal-600 w-full mt-3 py-2 rounded text-sm font-semibold"
+          className="bg-teal-500 hover:bg-teal-600 w-full mt-auto py-2 rounded text-sm font-semibold"
         >
           Quick View
         </button>

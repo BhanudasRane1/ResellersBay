@@ -1,6 +1,6 @@
 import { Mail } from "lucide-react";
 import bhanudasImg from "../assets/util/bhanudas.jpg";
-import rohanImg from "../assets/util/rohan.jpg";
+import rohanImg from "../assets/util/rohan.jpeg";
 
 const teamMembers = [
   {
@@ -61,4 +61,3 @@ export default function About() {
     </section>
   );
 }
-

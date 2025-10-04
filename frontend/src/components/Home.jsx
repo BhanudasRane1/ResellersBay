@@ -43,8 +43,9 @@ export default function Home() {
     branches: selectedBranchIds = [],
     years: selectedYearIds = [],
   }) => {
-    let result = filteredBooks;
+    let result = books; // 👈 always start from full list
 
+    // Branch filter
     if (selectedBranchIds.length > 0) {
       result = result.filter((book) => {
         if (typeof book.branch === "number")
@@ -60,6 +61,7 @@ export default function Home() {
       });
     }
 
+    // Year filter
     if (selectedYearIds.length > 0) {
       result = result.filter((book) => {
         if (typeof book.year === "number")
@@ -72,6 +74,28 @@ export default function Home() {
           return selectedYearIds.includes(book.year.id);
         }
         return false;
+      });
+    }
+
+    // Also apply search if active
+    if (searchValue.trim() !== "") {
+      const lowerValue = searchValue.toLowerCase();
+      result = result.filter((book) => {
+        const bookName = book.name?.toLowerCase() || "";
+        const branchName =
+          typeof book.branch === "object"
+            ? book.branch.name.toLowerCase()
+            : (book.branch || "").toLowerCase();
+        const yearName =
+          typeof book.year === "object"
+            ? book.year.name.toLowerCase()
+            : (book.year || "").toLowerCase();
+
+        return (
+          bookName.includes(lowerValue) ||
+          branchName.includes(lowerValue) ||
+          yearName.includes(lowerValue)
+        );
       });
     }
 
